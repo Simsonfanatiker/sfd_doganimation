@@ -5,6 +5,8 @@ author 'Simsonfanatiker Development'
 description 'Simple Dog Animation Menu'
 version '2.0.0'
 
+file 'version.json'
+
 client_scripts {
 	'@warmenu_neu/warmenu.lua',
 	'client.lua'

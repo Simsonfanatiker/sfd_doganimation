@@ -1282,28 +1282,41 @@
 
 
 
+-- version check
+Citizen.CreateThread(
+	function()
+		local vRaw = LoadResourceFile(GetCurrentResourceName(), 'version.json')
+		if vRaw and Config.versionCheck then
+			local v = json.decode(vRaw)
+			PerformHttpRequest(
+				'https://raw.githubusercontent.com/JokeDevil/JD_logs/master/version.json',
+				function(code, res, headers)
+					if code == 200 then
+						local rv = json.decode(res)
+						if rv.version ~= v.version then
+							print(
+								([[^1
 
-Citizen.CreateThread( function()
-  updatePath = "/Simsonfanatiker/sfd_doganimation" -- your git user/repo path
-  resourceName = "sfd_doganimation ("..GetCurrentResourceName()..")" -- the resource name
-  
-  function checkVersion(err,responseText, headers)
-    curVersion = LoadResourceFile(GetCurrentResourceName(), "version") -- make sure the "version" file actually exists in your resource root!
-  
-    if curVersion ~= responseText and tonumber(curVersion) < tonumber(responseText) then
-      print("\n###############################")
-      print("\n"..resourceName.." is outdated, should be:\n"..responseText.."is:\n"..curVersion.."\nplease update it from https://github.com"..updatePath.."")
-      print("\n###############################")
-    elseif tonumber(curVersion) > tonumber(responseText) then
-      print("You somehow skipped a few versions of "..resourceName.." or the git went offline, if it's still online i advise you to update ( or downgrade? )")
-    else
-      print("\n"..resourceName.." is up to date, have fun!")
-    end
-  end
-  
-  PerformHttpRequest("https://raw.githubusercontent.com"..updatePath.."/master/version", checkVersion, "GET")
-  end)
-
+-------------------------------------------------------
+_Simsonfanatiker_Logs
+UPDATE: %s Verfügbar
+CHANGELOG: %s
+-------------------------------------------------------
+^0]]):format(
+									rv.version,
+									rv.changelog
+								)
+							)
+						end
+					else
+						print('_Simsonfanatiker_Logs unable to check version')
+					end
+				end,
+				'GET'
+			)
+		end
+	end
+)
 
 
 
