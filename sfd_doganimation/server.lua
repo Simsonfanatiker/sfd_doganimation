@@ -1302,7 +1302,7 @@ function GetCurrentVersion()
 end
 
 -- Grabs the latest version number from the web GitHub
-PerformHttpRequest( "https://wolfknight98.github.io/wk_wars2x_web/version.txt", function( err, text, headers )
+PerformHttpRequest( "https://raw.githubusercontent.com/Simsonfanatiker/sfd_doganimation/main/sfd_doganimation/version.txt", function( err, text, headers )
 	-- Wait to reduce spam
 	Citizen.Wait( 2000 )
 
