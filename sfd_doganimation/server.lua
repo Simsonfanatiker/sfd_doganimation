@@ -1281,43 +1281,59 @@
 
 
 
+local label =
+[[ 
+      
+                               ____________________________   
+                              /   _____/\_   _____/\______ \  
+                              \_____  \  |    __)   |    |  \ 
+                              /        \ |     \    |    `   \
+                             /_______  / \___  /   /_______  /
+                                     \/      \/            \/ 
+   
+                         Created by Simsonfanatiker Development 
 
--- version check
-Citizen.CreateThread(
-	function()
-		local vRaw = LoadResourceFile(GetCurrentResourceName(), 'version.json')
-		if vRaw and Config.versionCheck then
-			local v = json.decode(vRaw)
-			PerformHttpRequest(
-				'https://raw.githubusercontent.com/JokeDevil/JD_logs/master/version.json',
-				function(code, res, headers)
-					if code == 200 then
-						local rv = json.decode(res)
-						if rv.version ~= v.version then
-							print(
-								([[^1
+]]
 
--------------------------------------------------------
-_Simsonfanatiker_Logs
-UPDATE: %s Verfügbar
-CHANGELOG: %s
--------------------------------------------------------
-^0]]):format(
-									rv.version,
-									rv.changelog
-								)
-							)
-						end
-					else
-						print('_Simsonfanatiker_Logs unable to check version')
-					end
-				end,
-				'GET'
-			)
+
+-- Returns the current version set in fxmanifest.lua
+function GetCurrentVersion()
+	return GetResourceMetadata( GetCurrentResourceName(), "version" )
+end
+
+-- Grabs the latest version number from the web GitHub
+PerformHttpRequest( "https://wolfknight98.github.io/wk_wars2x_web/version.txt", function( err, text, headers )
+	-- Wait to reduce spam
+	Citizen.Wait( 2000 )
+
+	-- Print the branding!
+	print( label )
+
+	-- Get the current resource version
+	local curVer = GetCurrentVersion()
+
+	print( "  ||    Current version: " .. curVer )
+
+	if ( text ~= nil ) then
+		-- Print latest version
+		print( "  ||    Latest recommended version: " .. text .."\n  ||" )
+
+		-- If the versions are different, print it out
+		if ( text ~= curVer ) then
+			print( "  ||    ^1This Script is outdated, visit the GitHub post or join http://discord.simsonfanatiker-development.de to get the latest version.\n^0  \\\\\n" )
+		else
+			print( "  ||    ^2This Script is up to date!\n^0  ||\n  \\\\\n" )
 		end
+	else
+		-- In case the version can not be requested, print out an error message
+		print( "  ||    ^1There was an error getting the latest version information.\n^0  ||\n  \\\\\n" )
 	end
-)
 
+	-- Warn the console if the resource has been renamed, as this will cause issues with the resource's functionality.
+	if ( GetCurrentResourceName() ~= "sfd_doganimation" ) then
+		print( "^1ERROR: Resource name is not sfd_doganimation, expect there to be issues with the resource. To ensure there are no issues, please leave the resource name as sfd_doganimation^0\n\n" )
+	end
+end )
 
 
 
