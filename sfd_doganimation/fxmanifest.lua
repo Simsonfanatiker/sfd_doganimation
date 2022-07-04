@@ -8,7 +8,7 @@ version '2.0.0'
 file 'version.json'
 
 client_scripts {
-	'@warmenu_neu/warmenu.lua',
+	'@warmenu/warmenu.lua',
 	'client.lua'
 }
 
